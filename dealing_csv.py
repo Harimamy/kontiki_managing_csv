@@ -1,5 +1,3 @@
-from builtins import list
-
 import connect_pg
 from concurrent.futures import ThreadPoolExecutor
 import time
@@ -85,7 +83,7 @@ class DealCsv(object):
                 else:
                     character_strong += "\'{}\', "
 
-        request_insert = "INSERT INTO \"DWH\".\"DATAS_clubdesreducs\" " \
+        request_insert = "INSERT INTO \"DWH\".\"DATAS_clubdesreducs_test\" " \
                          "(id, emailmd5, emailsha256, customsubscriberid, ip, vendor, trackingcode, geocountry, " \
                          "geostate, geocity, geozipcode, lastactivity,lastemail, lastopenemail, lastclickemail," \
                          "subscriptiondate, birthdate, carrefour, civility, country, em_creation, em_lastactivity," \
@@ -101,7 +99,7 @@ if __name__ == '__main__':
     # executor = ThreadPoolExecutor(max_workers=300)
     data = Deal_obj.reading_csv("../../Downloads/DW/DATAS EXPORT/CSV/Clubdesreducs_CARS_2019_10_25.csv")
     print("number of line ", len(data))
-    n = 100
+    n = 40
     number_thread = int(len(data) / n)
     list_ = [val for val in range(0, len(data), number_thread)]
     list_[-1] = list_[-1] + int(len(data) % n)
@@ -123,9 +121,9 @@ if __name__ == '__main__':
         t.join()
 
     print("number thread", number_thread, "list -->", list_)
-    print("execution time : %s secondes ---" % (time.time() - start_time))
-
     # problème first insert at ligne index 37445, 51353 data[51353:]
+
+    # counter = 0
     # for row in data:
     #     counter += 1
     #     try:
@@ -139,10 +137,11 @@ if __name__ == '__main__':
     #         list_data[9] = correct_name_geo_city
     #         query = Deal_obj.deal_cleaning(list_data)
     #         print(query)
-    #
+    #         Deal_obj.insert_to_pg(query)
     #         print("successful insertion at ligne ", counter)
     #         # if counter == 10:
     #         #     break
     #     except Exception:
     #         # pass
     #         raise ValueError("Value error raising by Harry on line ", counter)
+    print("execution time : %s secondes ---" % (time.time() - start_time))
