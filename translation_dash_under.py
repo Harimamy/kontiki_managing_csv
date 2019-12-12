@@ -19,3 +19,14 @@ chaine = "test.eu"
 #         print("False")
 
 list_cmp_ext = [print("True") if ex in chaine else print("False") for ex in ext]
+
+from collections import Counter
+
+liste = ['a','b','a','b','c','a','b','a','b','c','d']
+
+c = Counter(liste)
+print(c)
+for key, value in c.items():
+    if value > 1:
+        print(key, " répété {} fois".format(value))
+    print(key, value)
