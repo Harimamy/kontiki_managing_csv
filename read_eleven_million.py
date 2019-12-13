@@ -7,18 +7,21 @@ start_time = time.time()
 
 # with open("../../Downloads/DW/DATAS EXPORT/CSV/Kontiki_FR_Enrich1_20191106.csv", "r", encoding="utf-8") as file:
 
-with open("../../Downloads/DW/DATAS EXPORT/CSV/Kontiki_FR_Enrich1_20191115.csv", "r", encoding="latin1") as file:
+with open("../../Downloads/DW/DATAS EXPORT/Kontiki_FR_Enrich1_20191106/Kontiki_FR_Enrich1_20191115.csv", "r", encoding="latin1") as file:
     all_row = file.readlines()
     file.close()
 
 count = 0
 list_md5 = []
-for row in all_row[1:]:
-    count += 1
+list_check = []
+for row in all_row:
     each_obj = row.strip().split(";")
     list_md5.append(each_obj[0])
-    if len(each_obj[0]) < 2:
-        print("True and find at line ", count)
+    if each_obj[0] == '""':
+        # print("line before ", all_row[count-1], "\n", " line ", count-2, row)
+        print(all_row[count - 1] + "\n" + row)
+        list_check.append(count)
+    count += 1
 
 list_set_md5 = list(set(list_md5))
 
