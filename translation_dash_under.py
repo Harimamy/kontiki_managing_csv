@@ -22,7 +22,7 @@ list_cmp_ext = [print("True") if ex in chaine else print("False") for ex in ext]
 
 from collections import Counter
 
-liste = ['a','b','a','b','c','a','b','a','b','c','d']
+liste = ['a', 'b', 'a', 'b', 'c', 'a', 'b', 'a', 'b', 'c', 'd']
 
 c = Counter(liste)
 print(c)
