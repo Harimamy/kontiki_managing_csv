@@ -8,9 +8,9 @@ class DealCsv(object):
     def get_column_csv(self):
         pass
 
-    def get_to_pg(self):
+    def get_to_pg(self, query):
         connexion, cursor = connect_pg.postgres_connect()
-        cursor.execute('SELECT * FROM "DWH"."DATAS_clubdesreducs";')
+        cursor.execute(query)
         rows = cursor.fetchall()
         connexion.close()
         return rows
