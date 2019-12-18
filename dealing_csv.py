@@ -58,7 +58,7 @@ class DealCsv(object):
                 count += 1
 
     def reading_csv(self, path):
-        with open(path, "r", encoding="utf-8-sig") as file:
+        with open(path, "r") as file:
             data = file.readlines()[1:]
             file.close()
         return data

@@ -27,7 +27,7 @@ class DealElevenMillions(object):
                 count += 1
         return list_md5
 
-    def count_md5(self, list_email_md5, all_row, list_check):
+    def count_md5_in_11millions(self, list_email_md5, all_row, list_check):
         # list_set_md5 = list(set(list_email_md5))
         # print(" Here is the number of row \'Kontiki_FR_Enrich1_20191106.csv\' --> ", len(all_row))
         # print(" length of list_md5 = ", len(list_email_md5), " -- len set_liste", len(list_set_md5))
@@ -45,20 +45,35 @@ class DealElevenMillions(object):
             f.close()
             print("48 lines deleting successfull!")
 
+    def get_all_md5_infile(self, path):
+        data_md5_file = deal_obj.reading_csv(path)
+        return [row.strip().split(",")[1] for row in data_md5_file]
+
     def get_list_five_points(self, path, index_last_click, index_em_last_click):
-        list_five_points = []
-        data_base_thematic = deal_obj.reading_csv(path)
+        list_five_points, data_base_thematic = [], deal_obj.reading_csv(path)
         for row in data_base_thematic:
             list_data_split = row.strip().split(",")
             # if lastclickemail and em_lastclick == '' ## for 5 points
-            if list_data_split[index_last_click] and list_data_split[index_em_last_click] == '':
+            if list_data_split[index_last_click] == '' and list_data_split[index_em_last_click] == '':
                 list_five_points.append("'" + list_data_split[1] + "',")
         return list_five_points
+
+    def get_list_ten_points(self, path, index_last_click, index_em_last_click):
+        list_ten_points, data_base_thematic = [], deal_obj.reading_csv(path)
+        for row in data_base_thematic:
+            list_data_split = row.strip().split(",")
+            # if lastclickemail and em_lastclick != '' ## for 10 points
+            if list_data_split[index_last_click] != '' or list_data_split[index_em_last_click] != '':
+                list_ten_points.append("'" + list_data_split[1] + "',")
+        return list_ten_points
 
     def output_infile_write(self, path, list_to_write_on_file):
         with open(path, "w", encoding="latin1") as file_output:
             file_output.writelines(list_to_write_on_file)
             file_output.close()
+
+    def list_difference(self, superior_list, inferior_list):
+        return [x for x in superior_list if x not in inferior_list]
 
 
 if __name__ == '__main__':
@@ -77,37 +92,40 @@ if __name__ == '__main__':
     #         elt = elt[1:-1].lower()
     #         list_eleven_md5_rectif.append(elt)
 
-    list_md5_exist_in_base = deal_obj.get_to_pg('SELECT "MD5" FROM "DWH"."Kontiki_FR_11Mmd5" WHERE "Base" = \'Club des Reducs\'')
-    print("here is the number of md5 on database: ", len(list_md5_exist_in_base), "the type is", type(list_md5_exist_in_base[1]))
-    list_md5_base = [element[0] for element in list_md5_exist_in_base]
-    print(list_md5_base[:5])
-    print("number of liste source database is:", len(list_md5_base))
+    # list_md5_tag_car = deal_obj.get_to_pg('SELECT "MD5" FROM "DWH"."Kontiki_FR_11Mmd5" WHERE "Cars" = 5')
+    # print("here is the number of md5 on Cars: ", len(list_md5_tag_car))
+    # list_md5_tag_car_indb = [element[0] for element in list_md5_tag_car]
+    # print(list_md5_tag_car_indb[:5])
 
     list_md5_cr_car = []
-    total_md5_tocompare = []
+    list_md5_cr_cosmetics = []
     list_5_points = []
-    data_clubdesreducs_cars = deal_obj.reading_csv("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_CARS_2019_11_29.csv")
-    for row in data_clubdesreducs_cars:
-        list_data = row.strip().split(",")
-        # list_md5_cr_car.append("'" + list_data[1] + "',")
-        total_md5_tocompare.append(list_data[1])
-        # if list_data[14] == '' and list_data[23] == '':
-        #     list_5_points.append("'" + list_data[1] + "',")
-        # normally we have: 51687 len(list_md5_cr_car)
+    # data_clubdesreducs_cars = deal_obj.reading_csv("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_CARS_2019_11_29.csv")
+    # for row in data_clubdesreducs_cars:
+    #     list_data = row.strip().split(",")
+    #     list_md5_cr_car.append(list_data[1])
+    # normally we have: 51687 len(list_md5_cr_car)
 
-    print(len(total_md5_tocompare), total_md5_tocompare[:5])
-    list_in_cr_car_notbase = [x for x in total_md5_tocompare if x not in list_md5_base]
-    print("here is the number of difference: ", len(list_in_cr_car_notbase))
+    # data_clubdesreducs_cosmetics = deal_obj.reading_csv("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
+    # for row in data_clubdesreducs_cosmetics:
+    #     list_data = row.strip().split(",")
+    #     list_md5_cr_cosmetics.append(list_data[1])
 
-    with open("../../Downloads/DW/DATAS EXPORT/Kontiki_FR_Enrich1_20191106/out_not_inside_md5_in_cr_car.txt", "w", encoding="latin1") as file_output:
-        for i in list_in_cr_car_notbase:
-            file_output.write(i + "\n")
-        file_output.close()
+    list_md5_cosmetic = main_deal.get_all_md5_infile("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
+    print("=============================================>>> ", len(list_md5_cosmetic))
+    print(list_md5_cosmetic[:7])
+    list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
+    # list_ten_points_update = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_CARS_2019_11_29.csv", 14, 23)
+
+    # list_diff_car5pt = main_deal.list_difference(list_5_points, list_md5_tag_car_indb)
+    # print("here is the number of difference: ", len(list_diff_car5pt))
+
+    # with open("../../Downloads/DW/DATAS EXPORT/Kontiki_FR_Enrich1_20191106/out_CR_cars_10points.txt", "w", encoding="latin1") as file_output:
+    #     file_output.writelines(list_ten_points_update)
+    #     file_output.close()
 
     # print("we have the number of email md5 in club des reducs CAR :", len(list_md5_cr_car), "and the eleven million :", len(list_eleven_md5))
-    # print("here is the number of 5 points: ", len(list_5_points))
-    print("*"*200)
-    # print("all email md5 crypted in md5_cr_CAR: ", len(list_md5_cr_car))
-    print("*"*200)
+    print("*" * 200)
+    print("*" * 200)
 
     print("execution time : %s secondes ---" % (time.time() - start_time))
