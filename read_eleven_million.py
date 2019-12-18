@@ -2,6 +2,8 @@ import connect_pg
 import dealing_csv
 from collections import Counter
 import time
+import os
+import zipfile
 
 
 class DealElevenMillions(object):
@@ -45,11 +47,18 @@ class DealElevenMillions(object):
             f.close()
             print("48 lines deleting successfull!")
 
-    def get_all_md5_infile(self, path):
+    @staticmethod
+    def get_all_md5_infile(path):
         data_md5_file = deal_obj.reading_csv(path)
         return [row.strip().split(",")[1] for row in data_md5_file]
 
-    def get_list_five_points(self, path, index_last_click, index_em_last_click):
+    @staticmethod
+    def get_all_md5_for_query(path):
+        data_md5_file = deal_obj.reading_csv(path)
+        return ["'" + str(row.strip().split(",")[1]) + "'," for row in data_md5_file]
+
+    @staticmethod
+    def get_list_five_points(path, index_last_click, index_em_last_click):
         list_five_points, data_base_thematic = [], deal_obj.reading_csv(path)
         for row in data_base_thematic:
             list_data_split = row.strip().split(",")
@@ -58,7 +67,8 @@ class DealElevenMillions(object):
                 list_five_points.append("'" + list_data_split[1] + "',")
         return list_five_points
 
-    def get_list_ten_points(self, path, index_last_click, index_em_last_click):
+    @staticmethod
+    def get_list_ten_points(path, index_last_click, index_em_last_click):
         list_ten_points, data_base_thematic = [], deal_obj.reading_csv(path)
         for row in data_base_thematic:
             list_data_split = row.strip().split(",")
@@ -67,13 +77,26 @@ class DealElevenMillions(object):
                 list_ten_points.append("'" + list_data_split[1] + "',")
         return list_ten_points
 
-    def output_infile_write(self, path, list_to_write_on_file):
+    @staticmethod
+    def output_infile_write(path, list_to_write_on_file):
         with open(path, "w", encoding="latin1") as file_output:
             file_output.writelines(list_to_write_on_file)
             file_output.close()
 
-    def list_difference(self, superior_list, inferior_list):
+    @staticmethod
+    def list_difference(superior_list, inferior_list):
         return [x for x in superior_list if x not in inferior_list]
+
+    @staticmethod
+    def unzip_all_file_method(folder, folder_to_extract):
+        counter = 0
+        for item in os.listdir(folder):
+            if item.endswith(".zip"):
+                with zipfile.ZipFile(folder + "/" + item, 'r') as zip_ref:
+                    zip_ref.extractall(folder_to_extract)
+                counter += 1
+                zip_ref.close()
+        print("{} file unzip successfully!".format(counter))
 
 
 if __name__ == '__main__':
@@ -106,23 +129,20 @@ if __name__ == '__main__':
     #     list_md5_cr_car.append(list_data[1])
     # normally we have: 51687 len(list_md5_cr_car)
 
-    # data_clubdesreducs_cosmetics = deal_obj.reading_csv("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
-    # for row in data_clubdesreducs_cosmetics:
-    #     list_data = row.strip().split(",")
-    #     list_md5_cr_cosmetics.append(list_data[1])
-
-    list_md5_cosmetic = main_deal.get_all_md5_infile("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
-    print("=============================================>>> ", len(list_md5_cosmetic))
+    list_md5_cosmetic = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
+    # print("=============================================>>> ", len(list_md5_cosmetic))
     print(list_md5_cosmetic[:7])
-    list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
-    # list_ten_points_update = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_CARS_2019_11_29.csv", 14, 23)
+    # list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
+    # list_five_points_cosmetics = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv", 14, 23)
+    # list_ten_points_cosmetics = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv", 14, 23)
 
     # list_diff_car5pt = main_deal.list_difference(list_5_points, list_md5_tag_car_indb)
     # print("here is the number of difference: ", len(list_diff_car5pt))
 
-    # with open("../../Downloads/DW/DATAS EXPORT/Kontiki_FR_Enrich1_20191106/out_CR_cars_10points.txt", "w", encoding="latin1") as file_output:
-    #     file_output.writelines(list_ten_points_update)
-    #     file_output.close()
+    main_deal.unzip_all_file_method("../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs", "../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs/File_CSV")
+
+    # main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_cosmetics_5points.txt", list_five_points_cosmetics)
+    # main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_cosmetics_10points.txt", list_ten_points_cosmetics)
 
     # print("we have the number of email md5 in club des reducs CAR :", len(list_md5_cr_car), "and the eleven million :", len(list_eleven_md5))
     print("*" * 200)
