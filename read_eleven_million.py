@@ -126,13 +126,12 @@ if __name__ == '__main__':
     #     list_md5_cr_car.append(list_data[1])
     # normally we have: 51687 len(list_md5_cr_car)
 
-    tag1 = "hightech"
-    tag2 = "home_assistance"
-    list_md5_hightech = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv")
-    list_md5_home_assistance = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv")
-    print("=============================================>>> ", tag1, len(list_md5_hightech))
-    print("=============================================>>> ", tag2, len(list_md5_home_assistance))
-    # print(list_md5_hightech[:7])
+    tag1 = "ink"
+    tag2 = "insurance_funeral"
+    list_md5_ink = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INK_2019_11_29_10_40_20.csv")
+    list_md5_insurance_funeral = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INSURANCE_FUNERAL_2019_11_29_10_40_54.csv")
+    print("=============================================>>> ", tag1, len(list_md5_ink))
+    print("=============================================>>> ", tag2, len(list_md5_insurance_funeral))
 
     # list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
     # list_diff_car5pt = main_deal.list_difference(list_5_points, list_md5_tag_car_indb)
@@ -140,24 +139,24 @@ if __name__ == '__main__':
     # main_deal.unzip_all_file_method("../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs", "../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs/File_CSV")
 
     # # TAG1 **********************************************************************************************************************************************
-    list_five_points_hightech = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv", 14, 23)
-    list_ten_points_hightech = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv", 14, 23)
+    list_five_points_ink = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INK_2019_11_29_10_40_20.csv", 14, 23)
+    list_ten_points_ink = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INK_2019_11_29_10_40_20.csv", 14, 23)
 
     # writing in file
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + ".txt", list_md5_hightech)
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_"+ tag1 +"_5points.txt", list_five_points_hightech)
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + "_10points.txt", list_ten_points_hightech)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + ".txt", list_md5_ink)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_"+ tag1 +"_5points.txt", list_five_points_ink)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + "_10points.txt", list_ten_points_ink)
     # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     #
     # # TAG2 **********************************************************************************************************************************************
-    list_five_points_home_assistance = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv", 14, 23)
-    list_ten_points_home_assistance = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv", 14, 23)
+    list_five_points_insurance_funeral = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INSURANCE_FUNERAL_2019_11_29_10_40_54.csv", 14, 23)
+    list_ten_points_insurance_funeral = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_INSURANCE_FUNERAL_2019_11_29_10_40_54.csv", 14, 23)
 
     # writing in file
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + ".txt", list_md5_home_assistance)
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_5points.txt", list_five_points_home_assistance)
-    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_10points.txt", list_ten_points_home_assistance)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + ".txt", list_md5_insurance_funeral)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_5points.txt", list_five_points_insurance_funeral)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_10points.txt", list_ten_points_insurance_funeral)
     # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     print("*" * 200)
