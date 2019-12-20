@@ -120,32 +120,45 @@ if __name__ == '__main__':
     # list_md5_tag_car_indb = [element[0] for element in list_md5_tag_car]
     # print(list_md5_tag_car_indb[:5])
 
-    list_md5_cr_car = []
-    list_md5_cr_cosmetics = []
-    list_5_points = []
     # data_clubdesreducs_cars = deal_obj.reading_csv("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_CARS_2019_11_29.csv")
     # for row in data_clubdesreducs_cars:
     #     list_data = row.strip().split(",")
     #     list_md5_cr_car.append(list_data[1])
     # normally we have: 51687 len(list_md5_cr_car)
 
-    list_md5_cosmetic = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv")
-    # print("=============================================>>> ", len(list_md5_cosmetic))
-    print(list_md5_cosmetic[:7])
-    # list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
-    # list_five_points_cosmetics = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv", 14, 23)
-    # list_ten_points_cosmetics = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\Clubdesreducs_COMESTICS_2019_11_29_11_11_39.csv", 14, 23)
+    tag1 = "hightech"
+    tag2 = "home_assistance"
+    list_md5_hightech = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv")
+    list_md5_home_assistance = main_deal.get_all_md5_for_query("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv")
+    print("=============================================>>> ", tag1, len(list_md5_hightech))
+    print("=============================================>>> ", tag2, len(list_md5_home_assistance))
+    # print(list_md5_hightech[:7])
 
+    # list_intersect_cars_cosmetics = main_deal.list_difference(list_md5_cr_car, list_md5_cr_cosmetics)
     # list_diff_car5pt = main_deal.list_difference(list_5_points, list_md5_tag_car_indb)
     # print("here is the number of difference: ", len(list_diff_car5pt))
+    # main_deal.unzip_all_file_method("../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs", "../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs/File_CSV")
 
-    main_deal.unzip_all_file_method("../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs", "../../Downloads/DW/DATAS EXPORT/DATABASE/Clubdesreducs/File_CSV")
+    # # TAG1 **********************************************************************************************************************************************
+    list_five_points_hightech = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv", 14, 23)
+    list_ten_points_hightech = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HIGHTECH_2019_11_29_11_13_56.csv", 14, 23)
 
-    # main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_cosmetics_5points.txt", list_five_points_cosmetics)
-    # main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_cosmetics_10points.txt", list_ten_points_cosmetics)
+    # writing in file
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + ".txt", list_md5_hightech)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_"+ tag1 +"_5points.txt", list_five_points_hightech)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag1 + "_10points.txt", list_ten_points_hightech)
+    # ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    # print("we have the number of email md5 in club des reducs CAR :", len(list_md5_cr_car), "and the eleven million :", len(list_eleven_md5))
+    #
+    # # TAG2 **********************************************************************************************************************************************
+    list_five_points_home_assistance = main_deal.get_list_five_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv", 14, 23)
+    list_ten_points_home_assistance = main_deal.get_list_ten_points("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File_CSV\Clubdesreducs_HOMEASSISTANCE_2019_11_29_10_39_41.csv", 14, 23)
+
+    # writing in file
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + ".txt", list_md5_home_assistance)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_5points.txt", list_five_points_home_assistance)
+    main_deal.output_infile_write("..\..\Downloads\DW\DATAS EXPORT\DATABASE\Clubdesreducs\File txt\out_CR_" + tag2 + "_10points.txt", list_ten_points_home_assistance)
+    # ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
     print("*" * 200)
-    print("*" * 200)
-
     print("execution time : %s secondes ---" % (time.time() - start_time))
