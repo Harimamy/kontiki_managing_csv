@@ -348,8 +348,8 @@ if __name__ == '__main__':
     # liste_cmc_voyance = DealElevenMillions.get_all_md5_per_file("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file_CSV/consommermoinscher_VOYANCE_2020_02_11.csv")
     # DealElevenMillions.output_infile_write_str_tuple("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file txt/consommermoinscher_VOYANCE_2020_02_11.txt", liste_cmc_voyance)
     """FIRST STEP after receiving all zip file for just One BASE"""
-    # main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt",
-    #                                          "Le bon kdo")
+    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt",
+                                             "Le bon kdo")
 
     '''connect to pgsql for recuper all md5 checked'''
     # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
