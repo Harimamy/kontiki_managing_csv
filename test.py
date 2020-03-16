@@ -13,3 +13,4 @@ if a != "":
     print("Tsy milamina kely an!! ")
 else:
     print("NORRRRRMMMMMMEEEEE ANNNANNNNNNNN!!!! ")
+

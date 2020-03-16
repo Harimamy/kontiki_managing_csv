@@ -58,7 +58,7 @@ class DealCsv(object):
                 count += 1
 
     def reading_csv(self, path):
-        with open(path, "r") as file:
+        with open(path, "r", encoding="latin1") as file:
             data = file.readlines()[1:]
             file.close()
         return data
@@ -124,10 +124,10 @@ if __name__ == '__main__':
     # problème first insert at ligne index 37445, 51353 data[51353:]
 
     # counter = 0
-    # for row in data:
+    # for mail_md5 in data:
     #     counter += 1
     #     try:
-    #         list_data = row.strip().split(",")
+    #         list_data = mail_md5.strip().split(",")
     #         correct_name_geo_city = ""
     #         for letter in list_data[9]:
     #             if letter == "'":
