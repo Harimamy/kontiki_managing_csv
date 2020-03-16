@@ -352,8 +352,8 @@ if __name__ == '__main__':
                                              "Le bon kdo")
 
     '''connect to pgsql for recuper all md5 checked'''
-    # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
-    #                                                                                                                                                                "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
+    DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
+                                                                                                                                                                   "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
 
     #
     # # time2 = time.time()
