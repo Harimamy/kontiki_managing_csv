@@ -156,7 +156,9 @@ class DealElevenMillions(object):
         for item in os.listdir(folder):
             if item.endswith(".zip"):
                 with zipfile.ZipFile(folder + "/" + item, 'r') as zip_ref:
-                    zip_ref.extractall(folder_to_extract)
+                    # psswd = "5wq3(lcA"
+                    # zip_ref.extractall(path=folder_to_extract, pwd=bytes(psswd, 'utf-8'))
+                    zip_ref.extractall(path=folder_to_extract)
                 counter += 1
                 zip_ref.close()
         print("{} file(s) unzip successfully!".format(counter))
@@ -193,7 +195,7 @@ class DealElevenMillions(object):
         # column name display
         for file_csv in list_file_csv:
             df = pd.read_csv(file_csv, low_memory=False)
-            print(df.columns, "===>", file_csv[10:-19])
+            print(df.columns, "===>", file_csv[-16:])
             # main_deal.output_infile_write_str_list(file_csv[:63] + "md5 per tag/" + file_csv[63:-19] + ".txt", list(df['emailmd5']))
 
     @staticmethod
@@ -270,6 +272,12 @@ class DealElevenMillions(object):
         # the_result_is = set_four_million_md5 - answer_blacklist
         # print(len(set_blacklist_fr0 & set_blacklist_fr1))
         # print(len(set_four_million_md5))
+
+    @staticmethod
+    def sum_of_all_line_entry_all_file_jut_one_base(path):
+        len_lbk = sum([len(DealElevenMillions.content_file_to_eval_list(path + "/" + file_lbk)) for file_lbk in os.listdir(path)])
+        return len_lbk
+        print(len_lbk)
 
 
 if __name__ == '__main__':
@@ -348,12 +356,11 @@ if __name__ == '__main__':
     # liste_cmc_voyance = DealElevenMillions.get_all_md5_per_file("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file_CSV/consommermoinscher_VOYANCE_2020_02_11.csv")
     # DealElevenMillions.output_infile_write_str_tuple("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file txt/consommermoinscher_VOYANCE_2020_02_11.txt", liste_cmc_voyance)
     """FIRST STEP after receiving all zip file for just One BASE"""
-    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt",
-                                             "Le bon kdo")
+    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file txt", "Ideemaline")
 
     '''connect to pgsql for recuper all md5 checked'''
-    DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
-                                                                                                                                                                   "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
+    # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
+    #                                                                                                                                                                "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
 
     #
     # # time2 = time.time()
@@ -396,9 +403,6 @@ if __name__ == '__main__':
     # main_deal.output_infile_write_str_list("..\..\Dpwnloads\DW\DATAS EXPORT\DATABASE\LagendadesVP/file_CSV\edit file/str_all_cosmetics_agenda_VP.txt", tuple_to_write_on_file=list_md5_cosmetics_file_agenda_vp)
     # main_deal.unzip_all_file_method(folder="../../Downloads/DW/DATAS EXPORT/DATABASE/Ma destinee", folder_to_extract="../../Downloads/DW/DATAS EXPORT/DATABASE/Ma destinee/file_CSV")
     # main_deal.output_infile_write_str_tuple('../../Downloads/DW/TUPLE_BL_Domains_seuls_FR_2018_09.txt', tuple(open('../../Downloads/DW/BL_Domains_seuls_FR_2018_09.csv', 'r').read().splitlines()))
-    path = "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/compter"
-    len_lbk = sum([len(DealElevenMillions.content_file_to_eval_list(path + "/" + file_lbk)) for file_lbk in os.listdir(path)])
-    print(len_lbk)
 
     print("*" * 200)
     print("execution time : %s secondes ---" % (time.time() - start_time))
