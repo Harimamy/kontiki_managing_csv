@@ -1,4 +1,4 @@
-import connect_pg
+from app_admin_dwh.manage_csv import connect_pg
 from concurrent.futures import ThreadPoolExecutor
 import time
 import threading

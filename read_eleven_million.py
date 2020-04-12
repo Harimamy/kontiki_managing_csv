@@ -1,14 +1,13 @@
 import glob
 import numpy as np
-import connect_pg
-import dealing_csv
+from app_admin_dwh.manage_csv import dealing_csv
 from collections import Counter
 import time
 import os
 import zipfile
-import connect_pg
+from app_admin_dwh.manage_csv import connect_pg
 import pandas as pd
-from SoloLearn import SoloLearn
+from app_admin_dwh.manage_csv.SoloLearn import SoloLearn
 import json
 
 pd.set_option('display.max_rows', 1000)
