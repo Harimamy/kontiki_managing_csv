@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="6598ef35-cb7c-4dff-8dc1-3d257329e426">
-        <schema name="DWH" object-types="dataset trigger, constraint, table, index, column" />
+        <schema name="DWH" object-types="view, table, constraint, dataset trigger, sequence, index, column, function" />
       </connection>
     </loaded-nodes>
   </component>

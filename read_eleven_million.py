@@ -2,6 +2,7 @@ import glob
 import numpy as np
 import connect_pg
 import dealing_csv
+import shutil
 from collections import Counter
 import time
 import os
@@ -164,11 +165,32 @@ class DealElevenMillions(object):
         print("{} file(s) unzip successfully!".format(counter))
 
     @staticmethod
+    def unzip_files_with_password_method(folder, folder_to_extract, password):
+        counter = 0
+        for item in os.listdir(folder):
+            if item.endswith(".zip"):
+                with zipfile.ZipFile(folder + "/" + item, 'r') as zip_ref:
+                    zip_ref.extractall(path=folder_to_extract, pwd=bytes(password, 'utf-8'))
+                counter += 1
+                zip_ref.close()
+        print("{} file(s) unzip successfully!".format(counter))
+
+    @staticmethod
     def generate_query():
         pass
 
     @staticmethod
-    def unzip_and_generate_md5_per_tag(folder_contain_zip, folder_contain_csv, folder_to_contain_text_file, base_name):
+    def unzip_and_generate_md5_per_tag(folder_contain_zip, base_name):
+        folder_contain_csv = folder_contain_zip + "/file_CSV"
+        folder_to_contain_text_file = folder_contain_zip + "/file txt"
+        folder_main = folder_contain_zip + "/main_zip"
+        os.makedirs(folder_main) if not os.path.exists(folder_main) else print("This folder " + folder_main + " already exist!")
+        os.makedirs(folder_contain_csv) if not os.path.exists(folder_contain_csv) else print("This folder " + folder_contain_csv + " already exist!")
+        os.makedirs(folder_to_contain_text_file) if not os.path.exists(folder_to_contain_text_file) else print("This folder " + folder_contain_csv + " already exist!")
+        for file in os.listdir(folder_contain_zip):
+            shutil.move(folder_contain_zip + "/" + file, folder_main + "/" + file)
+        password = input("Please enter the password to extract the file(s)!")
+        DealElevenMillions.unzip_files_with_password_method(folder_main, folder_contain_zip, password)
         main_deal.unzip_all_file_method(folder_contain_zip, folder_contain_csv)
         list_all_md5_base = []
         for item in os.listdir(folder_contain_csv):
@@ -356,7 +378,7 @@ if __name__ == '__main__':
     # liste_cmc_voyance = DealElevenMillions.get_all_md5_per_file("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file_CSV/consommermoinscher_VOYANCE_2020_02_11.csv")
     # DealElevenMillions.output_infile_write_str_tuple("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file txt/consommermoinscher_VOYANCE_2020_02_11.txt", liste_cmc_voyance)
     """FIRST STEP after receiving all zip file for just One BASE"""
-    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file txt", "Ideemaline")
+    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file txt", "Promoenexclu")
 
     '''connect to pgsql for recuper all md5 checked'''
     # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
