@@ -1,6 +1,6 @@
 import glob
 import numpy as np
-import connect_pg
+# import connect_pg
 import dealing_csv
 import shutil
 from collections import Counter
@@ -145,7 +145,6 @@ class DealElevenMillions(object):
     def output_infile_write_str_tuple(path, tuple_to_write_on_file):
         with open(path, "w", encoding="latin1") as file_output:
             file_output.write(str(tuple(tuple_to_write_on_file)))
-            file_output.close()
 
     @staticmethod
     def tuple_content_difference(superior_tuple, inferior_tuple):
@@ -182,13 +181,15 @@ class DealElevenMillions(object):
     @staticmethod
     def unzip_and_generate_md5_per_tag(folder_contain_zip, base_name):
         folder_contain_csv = folder_contain_zip + "/file_CSV"
+        print(folder_contain_csv, folder_contain_zip)
         folder_to_contain_text_file = folder_contain_zip + "/file txt"
         folder_main = folder_contain_zip + "/main_zip"
-        os.makedirs(folder_main) if not os.path.exists(folder_main) else print("This folder " + folder_main + " already exist!")
         os.makedirs(folder_contain_csv) if not os.path.exists(folder_contain_csv) else print("This folder " + folder_contain_csv + " already exist!")
         os.makedirs(folder_to_contain_text_file) if not os.path.exists(folder_to_contain_text_file) else print("This folder " + folder_contain_csv + " already exist!")
+        os.makedirs(folder_main) if not os.path.exists(folder_main) else print("This folder " + folder_main + " already exist!")
         for file in os.listdir(folder_contain_zip):
-            shutil.move(folder_contain_zip + "/" + file, folder_main + "/" + file)
+            if os.path.isfile(folder_contain_zip + "/" + file):
+                shutil.move(folder_contain_zip + "/" + file, folder_main + "/" + file)
         password = input("Please enter the password to extract the file(s)!")
         DealElevenMillions.unzip_files_with_password_method(folder_main, folder_contain_zip, password)
         main_deal.unzip_all_file_method(folder_contain_zip, folder_contain_csv)
@@ -378,11 +379,13 @@ if __name__ == '__main__':
     # liste_cmc_voyance = DealElevenMillions.get_all_md5_per_file("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file_CSV/consommermoinscher_VOYANCE_2020_02_11.csv")
     # DealElevenMillions.output_infile_write_str_tuple("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file txt/consommermoinscher_VOYANCE_2020_02_11.txt", liste_cmc_voyance)
     """FIRST STEP after receiving all zip file for just One BASE"""
-    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file txt", "Promoenexclu")
+    # main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Promoenexclu/file txt", "Promoenexclu")
+    # DealElevenMillions.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Supermalin", "Supermalin")
 
     '''connect to pgsql for recuper all md5 checked'''
     # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
     #                                                                                                                                                                "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
+    # DealElevenMillions.generate_tuple_md5_not_in_11million(106, "../../Downloads/DW/DATAS EXPORT/DATABASE/Supermalin/file txt/all_md5_Supermalin.txt", )
 
     #
     # # time2 = time.time()

@@ -9,5 +9,5 @@ extensions = [
 
 setup(
     cmdclass={'build_ext': build_ext},
-    ext_modules=cythonize(extensions), requires=['pandas']
+    ext_modules=cythonize(extensions), requires=['pandas', 'requests']
 )
