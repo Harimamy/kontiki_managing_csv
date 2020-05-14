@@ -9,10 +9,11 @@ from app_admin_dwh.manage_csv import connect_pg
 import pandas as pd
 from app_admin_dwh.manage_csv.SoloLearn import SoloLearn
 import json
+import shutil
 
-pd.set_option('display.max_rows', 1000)
-pd.set_option('display.max_columns', 1000)
-pd.set_option('display.width', 2000)
+pd.set_option('display.max_rows', 10000)
+pd.set_option('display.max_columns', 10000)
+pd.set_option('display.width', 20000)
 
 
 class DealElevenMillions(object):
@@ -163,13 +164,36 @@ class DealElevenMillions(object):
         print("{} file(s) unzip successfully!".format(counter))
 
     @staticmethod
+    def unzip_files_with_password_method(folder, folder_to_extract, password):
+        counter = 0
+        for item in os.listdir(folder):
+            if item.endswith(".zip"):
+                with zipfile.ZipFile(folder + "/" + item, 'r') as zip_ref:
+                    zip_ref.extractall(path=folder_to_extract, pwd=bytes(password, 'utf-8'))
+                counter += 1
+                zip_ref.close()
+        print("{} file(s) unzip successfully!".format(counter))
+
+    @staticmethod
     def generate_query():
         pass
 
     @staticmethod
-    def unzip_and_generate_md5_per_tag(folder_contain_zip, folder_contain_csv, folder_to_contain_text_file, base_name):
-        main_deal.unzip_all_file_method(folder_contain_zip, folder_contain_csv)
-        list_all_md5_base = []
+    def unzip_and_generate_md5_per_tag(folder_contain_zip, base_name):
+        folder_zip = str(folder_contain_zip)
+        folder_contain_csv = folder_zip + "/file_CSV"
+        folder_to_contain_text_file = folder_zip + "/file txt"
+        folder_main = folder_zip + "/main_zip"
+        os.makedirs(folder_contain_csv) if not os.path.exists(folder_contain_csv) else print("This folder " + folder_contain_csv + " already exist!")
+        os.makedirs(folder_to_contain_text_file) if not os.path.exists(folder_to_contain_text_file) else print("This folder " + folder_contain_csv + " already exist!")
+        os.makedirs(folder_main) if not os.path.exists(folder_main) else print("This folder " + folder_main + " already exist!")
+        for file in os.listdir(folder_zip):
+            if os.path.isfile(folder_zip + "/" + file):
+                shutil.move(folder_zip + "/" + file, folder_main + "/" + file)
+        password = 'input("Please enter the password to extract the file(s)!")'
+        DealElevenMillions.unzip_files_with_password_method(folder_main, folder_zip, password)
+        DealElevenMillions.unzip_all_file_method(folder_zip, folder_contain_csv)
+        list_all_md5_base, dict_data_to_sending, dict_thematic_number_active, tup_list_number_active = [], dict(), dict(), tuple()
         for item in os.listdir(folder_contain_csv):
             path = os.path.join(folder_contain_csv, item)
             if os.path.isdir(path):
@@ -177,10 +201,20 @@ class DealElevenMillions(object):
             elif item.endswith(".csv"):
                 list_all_md5_per_file = list(pd.read_csv(path, low_memory=False)['emailmd5'])
                 print(item, "======================>>", len(list_all_md5_per_file))
-                main_deal.output_infile_write_str_tuple(folder_to_contain_text_file + "{}{}.txt".format("/", item[:-3]), list_all_md5_per_file)
+                tup_list_number_active += (len(list_all_md5_per_file),)
+                dict_thematic_number_active[str(item)] = len(list_all_md5_per_file)
+                DealElevenMillions.output_infile_write_str_tuple(folder_to_contain_text_file + "{}{}.txt".format("/", item[:-3]), list_all_md5_per_file)
                 list_all_md5_base.extend(list_all_md5_per_file)
-        main_deal.output_infile_write_str_tuple(folder_to_contain_text_file + "/all_md5_" + base_name + ".txt", set(list_all_md5_base))
-        DealElevenMillions.write_all_column_name(folder_contain_csv)
+        file_thematic_most_active = 'None'
+        for key, value in dict_thematic_number_active.items():
+            if value == max(tup_list_number_active):
+                file_thematic_most_active = key
+        DealElevenMillions.output_infile_write_str_tuple(folder_to_contain_text_file + "/all_md5_" + str(base_name) + ".txt", set(list_all_md5_base))
+        dict_data_to_sending['number_of_active_mails'] = len(set(list_all_md5_base))
+        dict_data_to_sending['number_of_thematic'] = len([file for file in os.listdir(folder_contain_csv) if file.endswith(".csv")])
+        dict_data_to_sending['number_of_schemas'] = DealElevenMillions.write_all_column_name(folder_contain_csv)
+        dict_data_to_sending['most_active_thematic'] = file_thematic_most_active[:-4]
+        return dict_data_to_sending
 
     @staticmethod
     def recover_all_md5_not_in_11m(path_content_all_csv):
@@ -191,11 +225,12 @@ class DealElevenMillions(object):
     @staticmethod
     def write_all_column_name(path_content_all_csv):
         list_file_csv = glob.glob(path_content_all_csv + "/" + "*.csv")
-        # column name display
+        number_of_schemas = set()
         for file_csv in list_file_csv:
             df = pd.read_csv(file_csv, low_memory=False)
             print(df.columns, "===>", file_csv[-16:])
-            # main_deal.output_infile_write_str_list(file_csv[:63] + "md5 per tag/" + file_csv[63:-19] + ".txt", list(df['emailmd5']))
+            number_of_schemas.add(str(df.columns))
+        return len(number_of_schemas)
 
     @staticmethod
     def generate_tuple_md5_not_in_11million(check_value, path_content_file_all_md5_base, path_file_content_difference, last_id_md5):
@@ -355,8 +390,8 @@ if __name__ == '__main__':
     # liste_cmc_voyance = DealElevenMillions.get_all_md5_per_file("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file_CSV/consommermoinscher_VOYANCE_2020_02_11.csv")
     # DealElevenMillions.output_infile_write_str_tuple("../../Downloads/DW/DATAS EXPORT/DATABASE/Consommer moins cher/file txt/consommermoinscher_VOYANCE_2020_02_11.txt", liste_cmc_voyance)
     """FIRST STEP after receiving all zip file for just One BASE"""
-    main_deal.unzip_and_generate_md5_per_tag("../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file_CSV", "../../Downloads/DW/DATAS EXPORT/DATABASE/Ideemaline/file txt", "Ideemaline")
-
+    dict_datas = main_deal.unzip_and_generate_md5_per_tag("folder_test", "cmc")
+    print(dict_datas)
     '''connect to pgsql for recuper all md5 checked'''
     # DealElevenMillions.generate_tuple_md5_not_in_11million(97, "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file txt/all_md5_Le bon kdo.txt", "../../Downloads/DW/DATAS EXPORT/DATABASE/Le bon kdo/file "
     #                                                                                                                                                                "txt/file_content_difference_Le bon kdo_11m.txt", 11130542)
@@ -392,7 +427,6 @@ if __name__ == '__main__':
     #         id_md5 += 1
     ########## print("=========================================================================>>", len(all_row), "rows md5", item[12:-4], "successfull inserting!")
 
-
     # # list_intersect_beauty_cr_lgvp = [elt for elt in list_md5_clubreducs_cars if elt in list_md5_beauty_me]
     # # print(len(list_intersect_beauty_cr_lgvp), list_intersect_beauty_cr_lgvp[:4])
     # # with open("../../Downloads/DW/DATAS EXPORT/DATABASE/LagendadesVP/file txt/Ancien pratique/verif_all_point_5.txt", "w") as wr:
@@ -402,6 +436,8 @@ if __name__ == '__main__':
     # main_deal.output_infile_write_str_list("..\..\Dpwnloads\DW\DATAS EXPORT\DATABASE\LagendadesVP/file_CSV\edit file/str_all_cosmetics_agenda_VP.txt", tuple_to_write_on_file=list_md5_cosmetics_file_agenda_vp)
     # main_deal.unzip_all_file_method(folder="../../Downloads/DW/DATAS EXPORT/DATABASE/Ma destinee", folder_to_extract="../../Downloads/DW/DATAS EXPORT/DATABASE/Ma destinee/file_CSV")
     # main_deal.output_infile_write_str_tuple('../../Downloads/DW/TUPLE_BL_Domains_seuls_FR_2018_09.txt', tuple(open('../../Downloads/DW/BL_Domains_seuls_FR_2018_09.csv', 'r').read().splitlines()))
+    # number_schema = DealElevenMillions.write_all_column_name("../../Downloads/DW/DATAS EXPORT/DATABASE/LagendadesVP/file_CSV")
+    # print(number_schema)
 
     print("*" * 200)
     print("execution time : %s secondes ---" % (time.time() - start_time))
